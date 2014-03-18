@@ -499,6 +499,8 @@ coreHelpers.meta_description = function (options) {
         if (!this.relativeUrl || this.relativeUrl === '/' || this.relativeUrl === '' || this.relativeUrl.match(/\/page/)) {
             blog = config.theme();
             description = blog.description;
+        } else if (this.post) {
+            description = this.post.meta_description;
         } else {
             description = '';
         }

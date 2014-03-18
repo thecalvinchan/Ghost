@@ -50,11 +50,20 @@ Post = ghostBookshelf.Model.extend({
 
         ghostBookshelf.Model.prototype.saving.call(this);
 
-        this.set('html', converter.makeHtml(this.get('markdown')));
+        var html = converter.makeHtml(this.get('markdown'));
+        this.set('html', html); 
 
         // disabling sanitization until we can implement a better version
         //this.set('title', this.sanitize('title').trim());
         this.set('title', this.get('title').trim());
+
+        // setting meta-description to substring of body content
+        // Grabbing first 140 characters of the post
+        var desc = html;
+        desc = desc.replace(/<[^>]+>/g, '');
+        desc = desc.substring(0,137);
+        desc += '...';
+        this.set('meta_description', desc);
 
         if ((this.hasChanged('status') || !this.get('published_at')) && this.get('status') === 'published') {
             if (!this.get('published_at')) {
